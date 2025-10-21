@@ -27,3 +27,23 @@ class SingleMealTestCase(TestCase):
         self.assertEqual(meal.protein, 40.0)
         self.assertEqual(meal.carbs, 50.0)
         self.assertEqual(meal.fats, 20.0)
+
+class NutritionFactsTestCase(TestCase):
+    def test_nutrition_facts_calculation(self):
+        # Test the nutrition facts calculation logic
+        meal = Single_Meal.objects.create_meal(
+            meal_name="Salad",
+            meal_id="122",
+            user_id="122",
+            recipe_link="http://example.com/salad-meal",
+            meal_description="A healthy salad meal.",
+            meal_type_choice="Lunch",
+            calories=300,
+            protein=10.0,
+            carbs=20.0,
+            fats=15.0
+        )
+        self.assertEqual(meal.calories, 300)
+        self.assertEqual(meal.protein, 10.0)
+        self.assertEqual(meal.carbs, 20.0)
+        self.assertEqual(meal.fats, 15.0)

@@ -79,8 +79,8 @@ DATABASES = {
         'ENGINE': 'django.db.backends.mysql',
         'NAME': 'WellFed_DB',
         'USER': 'root',
-        'PASSWORD': 'Cocomac1!',
-        'HOST': 'localhost',
+        'PASSWORD': 'marionic101',
+        'HOST': '127.0.0.1',
         'PORT': '3306',
     }
 }
