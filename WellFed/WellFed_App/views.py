@@ -10,3 +10,6 @@ def meal_planner_view(request):
     single_meals = Single_Meal.objects.all() #returns all single meals from the database
     context = {'single_meals': single_meals}
     return render(request, 'mealPlanner.html', context)
+
+def home_view(request):
+    return render(request, 'home.html')

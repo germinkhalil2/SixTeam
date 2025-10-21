@@ -20,5 +20,6 @@ from WellFed_App import views
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('meal_planner', views.meal_planner_view)
+    path('meal_planner', views.meal_planner_view),
+    path('', views.home_view)
 ]
