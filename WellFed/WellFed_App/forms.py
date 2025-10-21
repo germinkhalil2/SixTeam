@@ -21,4 +21,3 @@ class SingleMealForm(forms.Form):
     protein = forms.FloatField()
     carbs = forms.FloatField()
     fats = forms.FloatField()
-    submit = forms.CharField(widget=forms.SubmitInput())

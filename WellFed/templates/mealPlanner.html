@@ -8,75 +8,17 @@
     <script src="/static/js/mealPlanner.js" defer></script>
 </head>
 <body>
-    <header>
-        <h1>WellFed Meal Planner</h1>
-        <nav>
-            <a href="/">Home</a>
-            <a href="/recipes">Recipes</a>
-            <a href="/meal-planner">Meal Planner</a>
-            <a href="/shopping-list">Shopping List</a>
-        </nav>
-    </header>
-    <main>
-        <section class="meal-planner">
-            <h2>Plan Your Meals</h2>
-            <form id="meal-planner-form">
-                <label for="week-start">Select Week Starting:</label>
-                <input type="date" id="week-start" name="week-start" required>
-
-                <div class="meals">
-                    <div class="meal-day">
-                        <h3>Monday</h3>
-                        <label for="monday-breakfast">Breakfast:</label>
-                        <input type="text" id="monday-breakfast" name="monday-breakfast" placeholder="Enter breakfast meal">
-                        <label for="monday-lunch">Lunch:</label>
-                        <input type="text" id="monday-lunch" name="monday-lunch" placeholder="Enter lunch meal">
-                        <label for="monday-dinner">Dinner:</label>
-                        <input type="text" id="monday-dinner" name="monday-dinner" placeholder="Enter dinner meal">
-                    </div>
-                    <!-- Repeat similar blocks for Tuesday to Sunday -->
-                </div>
-
-                <button type="submit">Save Meal Plan</button>
-            </form>
-        </section>
-        <section class="display-single-meal">
-            <h2>View Single Meal</h2>
-            <div id="meal-plan-display">
-                <!-- Meal plan will be displayed here after submission -->
-                {% if single_meals%}
-                <table class="singleMealTable">
-                <thead>
-                <tr>
-                    <th>meal_name</th>
-                    <th>recipe_link</th>
-                    <th>meal_type</th>
-                    <th>calories</th>
-                    <th>protein</th>
-                    <th>carbohydrates</th>
-                    <th>fat</th>
-                </tr>
-                </thead>
-                <tbody>
-                {% for meal in single_meals %}
-                <tr>
-                    <td>{{ meal.meal_name }}</td>
-                    <td><a href="{{ meal.recipe_link }}">View Recipe</a></td>
-                    <td>{{ meal.meal_type }}</td>
-                    <td>{{ meal.calories }}</td>
-                    <td>{{ meal.protein }}</td>
-                    <td>{{ meal.carbohydrates }}</td>
-                    <td>{{ meal.fat }}</td>
-                </tr>
-                {% endfor %}
-                </tbody>
-                </table>
-                {% else %}
-                <p>No meal selected. Please plan your meals to see the details here.</p>
-                {% endif %}
-            </div>
-        </section>
-    </main>
-    <footer>
-        <p>&copy; 2024 WellFed. All rights reserved.</p>
-    </footer>
+    <div>Hello from meal planner</div>
+    <h1>List of individual meals in the system</h1>
+        {% for i in single_meals %}
+        <div>{{i.meal_name}}</div>
+        <div>{{i.meal_description}}</div>
+        <div>{{i.meal_type_choice}}</div>
+        <div>{{i.calories}}calories</div>
+        <div>{{i.protein}}g protien</div>
+        <div>{{i.carbs}}g carbs</div>
+        <div>{{i.fats}}g fats</div>
+        <br>
+        {% endfor %}
+</body>
+</html>
