@@ -1,6 +1,8 @@
 from django.db import models
 
 # Create your models here.
+
+#Defining attributes of a single meal
 class Single_Meal (models.Model):
     meal_name = models.CharField(max_length=100)
     meal_id = models.CharField(max_length=50, unique=True)
