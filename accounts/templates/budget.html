@@ -1,0 +1,26 @@
+‎
++25
+Lines changed: 25 additions & 0 deletions
+Original file line number	Diff line number	Diff line change
+@@ -0,0 +1,25 @@
+{% extends 'base.html' %}
+{% block content %}
+<div class="container mt-5">
+  <h2 class="text-center mb-4">💰 Your Budget</h2>
+  <form method="POST" class="mb-4">
+    {% csrf_token %}
+    {{ form.as_p }}
+    <button type="submit" class="btn btn-primary">Set Budget</button>
+  </form>
+  <p><strong>Total Budget:</strong> ${{ budget.total_budget }}</p>
+  <p><strong>Total Spent:</strong> ${{ budget.total_spent }}</p>
+  {% if over_budget %}
+    <div class="alert alert-danger">
+      ⚠️ You are over budget!
+    </div>
+  {% endif %}
+  {% for message in messages %}
+    <div class="alert alert-{{ message.tags }}">{{ message }}</div>
+  {% endfor %}
+</div>
+{% endblock %}
