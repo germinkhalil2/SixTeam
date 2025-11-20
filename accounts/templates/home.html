@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Meal Planner Home</title>
+</head>
+<body>
+
+    <h1>Welcome, {{ request.user.username }}!</h1>
+    <h2>Your Meal Planner Dashboard</h2>
+
+    <p>Select an option below:</p>
+
+    <ul>
+        <li><a href="#">User Profile</a></li>
+        <li><a href="#">Plan This Week’s Meals</a></li>
+        <li><a href="#">View Grocery List</a></li>
+        <li><a href="#">Saved Recipes</a></li>
+        <li><a href="#">Nutrition Tracker</a></li>
+        <li><a href="#">Budget Tracker</a></li>
+       
+    </ul>
+
+    <br>
+
+    <form action="/logout/" method="POST">
+        {% csrf_token %}
+        <button type="submit">Logout</button>
+    </form>
+
+</body>
+</html>

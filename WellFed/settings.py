@@ -11,10 +11,10 @@ https://docs.djangoproject.com/en/5.2/ref/settings/
 """
 
 from pathlib import Path
-
+import os
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
-
+TEMPLATES_DIR = os.path.join(BASE_DIR, 'templates')
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/5.2/howto/deployment/checklist/
@@ -23,7 +23,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = 'django-insecure-1_2i04olooz#5r+zb-)a4q2w1gx!s=g-tg!18^ldts@i&hscn6'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = False
+DEBUG = True
 
 ALLOWED_HOSTS = []
 
@@ -55,7 +55,7 @@ ROOT_URLCONF = 'WellFed.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [],
+        'DIRS': [TEMPLATES_DIR],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -75,8 +75,12 @@ WSGI_APPLICATION = 'WellFed.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
+        'ENGINE': 'django.db.backends.mysql',
+        'NAME': 'WellFed_DB',
+        'USER': 'root',
+        'PASSWORD': 'Germin2001',
+        'HOST': 'localhost',
+        'PORT': '3306',
     }
 }
 
@@ -122,61 +126,6 @@ STATIC_URL = 'static/'
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
-
-INSTALLED_APPS = [
-    # django apps ...
-    "accounts",
-    # ...
-]
-
-from pathlib import Path
-BASE_DIR = Path(__file__).resolve().parent.parent
-
-TEMPLATES = [
-    {
-        "BACKEND": "django.template.backends.django.DjangoTemplates",
-        "DIRS": [ BASE_DIR / "templates" ],   # project-level templates
-        "APP_DIRS": True,
-        "OPTIONS": { "context_processors": [
-            "django.template.context_processors.debug",
-            "django.template.context_processors.request",
-            "django.contrib.auth.context_processors.auth",
-            "django.contrib.messages.context_processors.messages",
-        ]},
-    },
-]
-
-STATIC_URL = "/static/"
-STATICFILES_DIRS = [ BASE_DIR / "static" ]   # for development
-# Auth redirect settings
-LOGIN_REDIRECT_URL = "dashboard"   # name of the dashboard url
-LOGOUT_REDIRECT_URL = "login"
-LOGIN_URL = "login"
-
-from django.db import models
-from django.contrib.auth.models import User
-from django.db.models.signals import post_save
-from django.dispatch import receiver
-
-class Profile(models.Model):
-    user = models.OneToOneField(User, on_delete=models.CASCADE)
-    bio = models.TextField(blank=True)
-    avatar = models.ImageField(upload_to="avatars/", null=True, blank=True)
-    # add other profile fields: phone, diet_prefs, etc
-
-    def __str__(self):
-        return f"{self.user.username} Profile"
-
-@receiver(post_save, sender=User)
-def create_or_update_user_profile(sender, instance, created, **kwargs):
-    if created:
-        Profile.objects.create(user=instance)
-    else:
-        instance.profile.save()
-
-LOGIN_REDIRECT_URL = "dashboard"
-LOGOUT_REDIRECT_URL = "login"
-LOGIN_URL = "login"
-
+LOGIN_REDIRECT_URL = "home" 
 
 
