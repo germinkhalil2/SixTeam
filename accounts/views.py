@@ -45,3 +45,20 @@ def login_view(request):
 def logout_view(request):
     logout(request)
     return redirect("login")
+
+@login_required
+def budget_view(request):
+    result = None
+
+    if request.method == "POST":
+        budget = float(request.POST.get("budget"))
+        expenses = float(request.POST.get("expenses"))
+
+        if expenses > budget:
+            result = f"You are over budget by ${expenses - budget:.2f}"
+        elif expenses < budget:
+            result = f"You are under budget by ${budget - expenses:.2f}"
+        else:
+            result = "You are exactly on budget!"
+
+    return render(request, "budget.html", {"result": result})
