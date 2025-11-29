@@ -65,7 +65,7 @@
                 {% for meal in plan.meals.all %}
                 <div class="col-md-4">
                     <div class="card mb-4 shadow-sm">
-                    <img src="https://via.placeholder.com/150" class="card-img-top" alt="Meal image">
+                    
                     <div class="card-body">
                         <h5 class="card-title">{{ meal.meal_type_choice }}: {{ meal.meal_name }}</h5>
                         <p class="card-text">
@@ -251,14 +251,14 @@
                     <div class="card-body">
                     <h6 class="card-title">{{ recipe.title }}</h6>
                     <p>{{ recipe.description }}</p>
-                    <p>Calories: {{ recipe.calories }} | Protein: {{ recipe.protien }}g | Carbs: {{ recipe.carbs }}g | Fats: {{ recipe.fats }}g | Sugar: {{ recipe.sugar }}g</p>
+                    <p>Calories: {{ recipe.calories }} | Protein: {{ recipe.protein }}g | Carbs: {{ recipe.carbs }}g | Fats: {{ recipe.fats }}g | Sugar: {{ recipe.sugar }}g</p>
                     <a href="{{ recipe.link }}" target="_blank" class="btn btn-outline-primary btn-sm mt-2">View Recipe</a>
-                    <button class="btn btn-outline-primary btn-sm mt-2"
+                    <button class="btn btn-outline-primary btn-sm mt-2 add-to-mealplan"
                             data-title="{{ recipe.title }}"
                             data-description="{{ recipe.description }}"
                             data-link="{{ recipe.link }}"
                             data-calories= "{{ recipe.calories }}"
-                            data-protien="{{ recipe.protien }}"
+                            data-protein="{{ recipe.protein }}"
                             data-carbs= "{{ recipe.carbs }}"
                             data-fats= "{{ recipe.fats }}"
                             data-sugar= "{{ recipe.sugar }}"
@@ -282,13 +282,16 @@
                     <div class="card-body">
                     <h6 class="card-title">{{ meal.meal_name }}</h6>
                     <p>Calories: {{ meal.calories }} | Protein: {{ meal.protien }}g | Carbs: {{ meal.carbs }}g | Fats: {{ meal.fats }}g | Sugar: {{ meal.sugar }}g</p>
-                    <button class="btn btn-outline-primary btn-sm mt-2"
-                            data-title="{{ meal.meal_name }}"
-                            data-calories="{{ meal.calories }}"
-                            data-protien="{{ meal.protien }}"
-                            data-carbs= "{{ meal.carbs }}"
-                            data-fats= "{{ meal.fats }}"
-                            data-sugar= "{{ meal.sugar }}">
+                    <button class="btn btn-outline-primary btn-sm mt-2 add-to-mealplan"
+                        data-title="{{ meal.title }}"
+                        data-description="{{ meal.description }}"
+                        data-link="{{ meal.link }}"
+                        data-calories="{{ meal.calories }}"
+                        data-fats="{{ meal.fats }}"
+                        data-carbs="{{ meal.carbs }}"
+                        data-sugar="{{ meal.sugar }}"
+                        data-sodium="{{ meal.sodium }}"
+                        data-protein="{{ meal.protien }}">
                         Add to Meal Plan
                     </button>
                     </div>

@@ -268,7 +268,7 @@ def chatbot_search(request):
             "carbs": recipe.get("recipe_nutrition", {}).get("carbohydrate", 0),
             "sugar": recipe.get("recipe_nutrition", {}).get("sugar", 0),
             "sodium": recipe.get("recipe_nutrition", {}).get("sodium", 0),
-            "protein": recipe.get("recipe_nutrition", {}).get("protein", 0),
+            "protein": recipe.get("recipe_nutrition", {}).get("protien", 0),
         })
     
     return render(request, "chatbot_results.html", {"query": query, "results": results})
@@ -282,7 +282,6 @@ def add_recipe_to_mealplan(request):
         fats = float(request.POST.get("fats", 0))
         carbs = float(request.POST.get("carbs", 0))
         sugar = float(request.POST.get("sugar", 0))
-        sodium = float(request.POST.get("sodium", 0))
         protein = float(request.POST.get("protein", 0))
 
         meal_type_choice = request.POST.get("meal_type_choice")
@@ -303,7 +302,6 @@ def add_recipe_to_mealplan(request):
             fats=fats,
             carbs=carbs,
             sugar=sugar,
-            sodium=sodium,
             protien=protein,
             meal_type_choice=meal_type_choice,  # ✅ use user choice
             meal_date=target_date               # ✅ use user date
@@ -379,5 +377,5 @@ def login_view(request):
 
 def logout_view(request):
     logout(request)
-    return redirect("login")
+    return render(request, "logout.html")
 

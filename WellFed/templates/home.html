@@ -17,14 +17,14 @@
                 </div>
             </div>
             <div class="carousel-item">
-                <img src="{% static 'healthypic2.jpg'%}" class="d-block w-100" alt="Exercise" style="width:395px;height:200px">
+                <img src="{% static 'healthypic8.jpg.avif'%}" class="d-block w-100" alt="Exercise" style="width:395px;height:200px">
                 <div class="carousel-caption d-none d-md-block">
                     <h5>Stay Active</h5>
                     <p>Combine fitness with smart eating.</p>
                 </div>
             </div>
             <div class="carousel-item">
-                <img src="{% static 'healthypic3.jpg'%}" class="d-block w-100" alt="Healthy Living" style="width:395px;height:200px">
+                <img src="{% static 'healthypic7.png.jpg'%}" class="d-block w-100" alt="Healthy Living" style="width:395px;height:200px">
                 <div class="carousel-caption d-none d-md-block">
                     <h5>Healthy Lifestyle</h5>
                     <p>Small steps lead to big changes.</p>
@@ -43,7 +43,7 @@
     <!-- Hero Section -->
     <div class="text-center">
         <h1 class="display-4">Welcome to the WellFed App</h1>
-        <p class="lead">Your all-in-one solution for healthy eating, smart budgeting, and personalized nutrition tracking.</p>
+        <p class="lead">Your all-in-one solution for meal planning, smart budgeting, nutrition tracking, and personalized recipes.</p>
     </div>
      
         <!-- Add login/signup buttons -->
@@ -62,8 +62,8 @@
             <div class="card shadow-sm">
                 <div class="card-body">
                     <h5 class="card-title">Meal Planner</h5>
-                    <p class="card-text">Plan your weekly meals with ease and stay organized.</p>
-                    <a href="mealPlanner.html" class="btn btn-success">Get Started</a>
+                    <p class="card-text">Stay organized and plan your weekly meals with ease.</p>
+                    <a href="{% url 'meal_planner_view' %}" class="btn btn-success">Get Started</a>
                 </div>
             </div>
         </div>
@@ -73,7 +73,7 @@
                 <div class="card-body">
                     <h5 class="card-title">Nutrition Tracker</h5>
                     <p class="card-text">Track calories, macros, and nutrients to meet your health goals.</p>
-                    <a href="mealPlanner.html" class="btn btn-success">Track Now</a>
+                    <a href="{% url 'meal_planner_view' %}" class="btn btn-success">Track Now</a>
                 </div>
             </div>
         </div>
@@ -83,7 +83,7 @@
                 <div class="card-body">
                     <h5 class="card-title">Budget Calculator</h5>
                     <p class="card-text">Manage food expenses and save money while eating well.</p>
-                    <a href="mealPlanner.html" class="btn btn-success">Calculate</a>
+                    <a href="{% url 'meal_planner_view' %}" class="btn btn-success">Calculate</a>
                 </div>
             </div>
         </div>
@@ -93,7 +93,7 @@
                 <div class="card-body">
                     <h5 class="card-title">User Profile</h5>
                     <p class="card-text">Personalize your experience and save your preferences.</p>
-                    <a href="mealPlanner.html" class="btn btn-success">View Profile</a>
+                    <a href="{% url 'meal_planner_view' %}" class="btn btn-success">View Profile</a>
                 </div>
             </div>
         </div>
@@ -101,8 +101,11 @@
     
     <!-- Call to Action -->
     <div class="mt-5">
-        <h3>Start building a healthier lifestyle today!</h3>
-        <a href="mealPlanner.html" class="btn btn-lg btn-primary mt-3">Plan Your First Meal</a>
+        <h3 class="text-center">Start building a healthier lifestyle today!</h3>
+        <div class="text-center">
+        <a href="{% url 'meal_planner_view' %}" class="btn btn-lg btn-primary mt-3">Plan Your First Meal</a>
+        </div>
+        <br>
     </div>
 </div>
 {% endblock %}
