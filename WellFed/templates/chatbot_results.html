@@ -1,0 +1,151 @@
+{% extends "base.html" %}
+
+{% block title %}Recipe Chatbot Results{% endblock %}
+
+{% block content %}
+<h2>Results for "{{ query }}"</h2>
+
+<ul>
+    {% for recipe in results %}
+        <li>
+            <strong>{{ recipe.title }}</strong><br>
+            {{ recipe.description }}<br>
+            <a href="{{ recipe.link }}" target="_blank">View Recipe</a><br>
+            Calories: {{ recipe.calories }} kcal |
+            Fats: {{ recipe.fats }} g |
+            Carbs: {{ recipe.carbs }} g |
+            Sugar: {{ recipe.sugar }} g |
+            Sodium: {{ recipe.sodium }} mg |
+            Protein: {{ recipe.protein }} g
+            <br>
+            <button class="btn btn-sm btn-success add-to-mealplan" 
+                    data-title="{{ recipe.title }}"
+                    data-description="{{ recipe.description }}"
+                    data-link="{{ recipe.link }}"
+                    data-calories="{{ recipe.calories }}"
+                    data-fats="{{ recipe.fats }}"
+                    data-carbs="{{ recipe.carbs }}"
+                    data-sugar="{{ recipe.sugar }}"
+                    data-sodium="{{ recipe.sodium }}"
+                    data-protein="{{ recipe.protein }}">
+                Add to Meal Plan
+            </button>
+        </li>
+    {% endfor %}
+</ul>
+
+<div id="mealTypeModal" class="modal" style="display:none;">
+  <div class="modal-content">
+    <span class="close">&times;</span>
+    <h3>Select Meal Type and Date</h3>
+    <form id="mealTypeForm" method="post" action="{% url 'add-to-mealplan' %}">
+  {% csrf_token %}
+  <input type="hidden" name="title" id="titleField">
+  <input type="hidden" name="description" id="descriptionField">
+  <input type="hidden" name="link" id="linkField">
+  <input type="hidden" name="calories" id="caloriesField">
+  <input type="hidden" name="fats" id="fatsField">
+  <input type="hidden" name="carbs" id="carbsField">
+  <input type="hidden" name="sugar" id="sugarField">
+  <input type="hidden" name="sodium" id="sodiumField">
+  <input type="hidden" name="protein" id="proteinField">
+
+  <label for="mealTypeChoice">Meal Type:</label>
+  <select name="meal_type_choice" id="mealTypeChoice" required>
+    <option value="Breakfast">Breakfast</option>
+    <option value="Lunch">Lunch</option>
+    <option value="Dinner">Dinner</option>
+    <option value="Snack">Snack</option>
+    <option value="Dessert">Dessert</option>
+    <option value="Beverage">Beverage</option>
+  </select>
+  <br><br>
+
+  <label for="mealDate">Meal Date:</label>
+  <input type="date" name="meal_date" id="mealDate" required>
+  <br><br>
+
+  <button type="submit">Confirm</button>
+</form>
+  </div>
+</div>
+
+<style>
+.modal {
+  position: fixed;
+  z-index: 1000;
+  left: 0; top: 0;
+  width: 100%; height: 100%;
+  background-color: rgba(0,0,0,0.5);
+}
+.modal-content {
+  background: #fff;
+  margin: 15% auto;
+  padding: 20px;
+  width: 300px;
+  border-radius: 8px;
+  text-align: center;
+}
+.close {
+  float: right;
+  font-size: 20px;
+  cursor: pointer;
+}
+</style>
+
+<script>
+document.addEventListener("DOMContentLoaded", function() {
+  const modal = document.getElementById("mealTypeModal");
+  const closeBtn = document.querySelector(".close");
+  const form = document.getElementById("mealTypeForm");
+
+  // Fill hidden fields when clicking "Add to Meal Plan"
+  document.querySelectorAll(".add-to-mealplan").forEach(btn => {
+    btn.addEventListener("click", function() {
+      document.getElementById("titleField").value = this.dataset.title;
+      document.getElementById("descriptionField").value = this.dataset.description;
+      document.getElementById("linkField").value = this.dataset.link;
+      document.getElementById("caloriesField").value = this.dataset.calories;
+      document.getElementById("fatsField").value = this.dataset.fats;
+      document.getElementById("carbsField").value = this.dataset.carbs;
+      document.getElementById("sugarField").value = this.dataset.sugar;
+      document.getElementById("sodiumField").value = this.dataset.sodium;
+      document.getElementById("proteinField").value = this.dataset.protein;
+      modal.style.display = "block";
+    });
+  });
+
+  // Close modal
+  closeBtn.onclick = () => modal.style.display = "none";
+  window.onclick = (event) => {
+    if (event.target == modal) modal.style.display = "none";
+  };
+
+  // AJAX form submission
+  form.addEventListener("submit", function(event) {
+    event.preventDefault();
+    const csrfToken = document.querySelector('[name=csrfmiddlewaretoken]').value;
+    const formData = new FormData(form);
+
+    fetch("{% url 'add_recipe_to_mealplan' %}", {
+      method: "POST",
+      headers: { "X-CSRFToken": csrfToken },
+      body: formData
+    })
+    .then(response => {
+      if (response.ok) {
+        modal.style.display = "none";
+        window.location.href = "{% url 'meal_planner_view' %}";
+      } else {
+        alert("Error adding meal to plan.");
+      }
+    })
+    .catch(error => {
+      console.error("Error:", error);
+      alert("Something went wrong.");
+    });
+  });
+});
+</script>
+
+{% endblock %}

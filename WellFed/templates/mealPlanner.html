@@ -1,29 +1,418 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Meal Planner - WellFed</title>
-    <link rel="stylesheet" href="/static/css/styles.css">
-    <script src="/static/js/mealPlanner.js" defer></script>
-</head>
-<body>
-    <div>This is a temporary meal planner.</div>
-    <h1>List of individual meals in the system:</h1>
-        {% for i in single_meals %}
-        <div>{{i.meal_name}}</div>
-        <div>{{i.meal_description}}</div>
-        <div>{{i.meal_type_choice}}</div>
-        <div>{{i.calories}} calories</div>
-        <div>{{i.protein}}g protien</div>
-        <div>{{i.carbs}}g carbs</div>
-        <div>{{i.fats}}g fats</div>
-        <div>Link to Recipe: {{i.recipe_link}}</div>
-        <button type="button">Add Meal to Your Planner</button>
-        <br>
-        <br>
-        {% endfor %}
-        <br>
-    <a href="/">Return to Home Page</a>
-</body>
-</html>
+{% extends "base.html" %}
+{% load custom_filters %}
+
+{% block title %}Meal Planner Dashboard{% endblock %}
+
+{% block content %}
+<div class="container-fluid">
+  <div class="row">
+    <!-- Sidebar -->
+    <nav class="col-md-2 d-none d-md-block bg-light sidebar">
+      <div class="sidebar-sticky">
+        <h4 class="mt-3">Meal Planner</h4>
+        <ul class="nav flex-column">
+          <li class="nav-item"><a class="nav-link active" href="#">Meal Plan</a></li>
+          <li class="nav-item"><a class="nav-link" href="#">Nutrition Tracker Progress Bars</a></li>
+          <li class="nav-item"><a class="nav-link" href="#">Recipe Search Chatbot</a></li>
+          <li class="nav-item"><a class="nav-link" href="#">Recipe Suggestions</a></li>
+        </ul>
+      </div>
+    </nav>
+
+    <!-- Main Content -->
+    <main role="main" class="col-md-9 ml-sm-auto col-lg-10 px-4">
+      <h2 class="mt-4">Your Meal Plan</h2>
+      {% if view_type == "day" %}
+        <h5 class="text-muted">{{ current_date|date:"F j, Y" }}</h5>
+        {% elif view_type == "week" %}
+        <h5 class="text-muted">Week of {{ start_date|date:"F j, Y" }} – {{ end_date|date:"F j, Y" }}</h5>
+        {% elif view_type == "month" %}
+        <h5 class="text-muted">{{ start_date|date:"F Y" }}</h5>
+        {% endif %}
+            <!-- Meal Cards -->
+        <div class="d-flex justify-content-between align-items-center mb-3">
+            <div>
+                <a href="{% url 'meal_planner_view' %}?view_type=day&date={{ prev_date|date:'Y-m-d' }}" 
+                class="btn btn-outline-secondary btn-sm">← Previous</a>
+                <a href="{% url 'meal_planner_view' %}?view_type=day&date={{ next_date|date:'Y-m-d' }}" 
+                class="btn btn-outline-secondary btn-sm">Next →</a>
+                <!-- ✅ Today quick-jump -->
+                <a href="{% url 'meal_planner_view' %}?view_type=day&date={{ today_date|date:'Y-m-d' }}" 
+                class="btn btn-outline-primary btn-sm">Today</a>
+
+            </div>
+            <div>
+                <a href="{% url 'meal_planner_view' %}?view_type=day" class="btn btn-outline-primary btn-sm">Day</a>
+                <a href="{% url 'meal_planner_view' %}?view_type=week" class="btn btn-outline-primary btn-sm">Week</a>
+                <a href="{% url 'meal_planner_view' %}?view_type=month" class="btn btn-outline-primary btn-sm">Month</a>
+            </div>
+              <!-- ✅ Jump to Date Picker -->
+            <div>
+                <form method="get" action="{% url 'meal_planner_view' %}" class="d-flex">
+                <input type="hidden" name="view_type" value="{{ view_type }}">
+                <input type="date" name="date" class="form-control form-control-sm me-2" 
+                        value="{{ current_date|date:'Y-m-d' }}">
+                <button type="submit" class="btn btn-outline-primary btn-sm">Jump to Date</button>
+                </form>
+                </div>
+
+            </div>
+
+        <div class="row">
+            {% if view_type == "day" %}
+            <div class="row">
+            {% for plan in meal_plans %}
+                {% for meal in plan.meals.all %}
+                <div class="col-md-4">
+                    <div class="card mb-4 shadow-sm">
+                    <img src="https://via.placeholder.com/150" class="card-img-top" alt="Meal image">
+                    <div class="card-body">
+                        <h5 class="card-title">{{ meal.meal_type_choice }}: {{ meal.meal_name }}</h5>
+                        <p class="card-text">
+                        Calories: {{ meal.calories }} |
+                        Protein: {{ meal.protien }}g |
+                        Carbs: {{ meal.carbs }}g |
+                        Fats: {{ meal.fats }}g |
+                        Sugar: {{ meal.sugar }}g
+                        </p>
+                    </div>
+                    </div>
+                </div>
+                {% endfor %}
+            {% empty %}
+                <p>No meals planned yet for this day.</p>
+            {% endfor %}
+            </div>
+            {% endif %}
+            {% if view_type == "week" or view_type == "month" %}
+                <table class="table table-bordered">
+                <thead>
+                    <tr>
+                    <th>Meal Type</th>
+                    {% for day in days %}
+                        <th>{{ day|date:"M d" }}</th>
+                    {% endfor %}
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for row in grid_rows %}
+                    <tr>
+                        <td>{{ row.meal_type }}</td>
+                        {% for cell in row.cells %}
+                        <td>
+                            {% for meal in cell %}
+                            <div class="card mb-2">
+                                <div class="card-body p-2">
+                                <strong>{{ meal.meal_name }}</strong><br>
+                                {{ meal.calories }} kcal
+                                </div>
+                            </div>
+                            {% endfor %}
+                        </td>
+                        {% endfor %}
+                    </tr>
+                    {% endfor %}
+                </tbody>
+                </table>
+                {% endif %}
+
+        </div>
+
+        <h2 class="mt-4">Nutrition Tracker Progress Bars</h2>
+        <!-- Nutrition Summary -->
+        <div class="row mb-4">
+        <div class="col-md-3">
+            <div class="card text-center shadow-sm">
+            <div class="card-body">
+                <h5 class="card-title">Calories</h5>
+                <p class="card-text">{{ total_calories }} / {{ target_calories }} kcal</p>
+                <div class="progress">
+                    <div class="progress-bar bg-success" role="progressbar"
+                        style="width: {{ summary.calories|div:target_calories|floatformat:0 }}%">
+                    </div>
+                </div>
+                    <p>{{ summary.calories }} / {{ target_calories }} kcal</p>
+            </div>
+            </div>
+        </div>
+
+  <div class="col-md-3">
+    <div class="card text-center shadow-sm">
+      <div class="card-body">
+        <h5 class="card-title">Protein</h5>
+        <p class="card-text">{{ total_protein }}g / {{ target_protein }}g</p>
+        <div class="progress">
+        <div class="progress-bar bg-success" role="progressbar"
+            style="width: {{ summary.protein | div:target_protein|floatformat:0 }}%">
+        </div>
+        </div>
+        <p>{{ summary.protein }} / {{ target_protein }} kcal</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- Repeat for Carbs, Fats -->
+     <div class="col-md-3">
+    <div class="card text-center shadow-sm">
+      <div class="card-body">
+        <h5 class="card-title">Carbs</h5>
+        <p class="card-text">{{ total_carbs }}g / {{ target_carbs }}g</p>
+        <div class="progress">
+        <div class="progress-bar bg-success" role="progressbar"
+            style="width: {{ summary.carbs | div:target_carbs|floatformat:0 }}%">
+        </div>
+        </div>
+        <p>{{ summary.carbs }} / {{ target_carbs }} kcal</p>
+      </div>
+    </div>
+  </div>
+
+     <div class="col-md-3">
+    <div class="card text-center shadow-sm">
+      <div class="card-body">
+        <h5 class="card-title">Fats</h5>
+        <p class="card-text">{{ total_fats }}g / {{ target_fats }}g</p>
+        <div class="progress">
+        <div class="progress-bar bg-success" role="progressbar"
+            style="width: {{ summary.fats | div:target_fats|floatformat:0 }}%">
+        </div>
+        </div>
+        <p>{{ summary.fats }} / {{ target_fats }} kcal</p>
+      </div>
+    </div>
+  </div>
+
+
+</div>
+
+        <h2 class="mt-4">Recipe Search Chatbot</h2>
+      <!-- Chatbot Search Section -->
+      <div class="card mb-5 shadow-sm">
+        <div class="card-header bg-primary text-white">
+          Recipe Chatbot
+        </div>
+        <div class="card-body">
+          <form method="get" action="{% url 'chatbot_search' %}" class="d-flex mb-3">
+            <input type="text" name="q" class="form-control me-2" placeholder="Search for recipes...">
+            <button type="submit" class="btn btn-primary">Search</button>
+          </form>
+
+          <div class="row">
+            {% for recipe in results %}
+              <div class="col-md-4">
+                <div class="card mb-4">
+                  <div class="card-body">
+                    <h5 class="card-title">{{ recipe.title }}</h5>
+                    <p class="card-text">{{ recipe.description }}</p>
+                    <p class="small text-muted">
+                      Calories: {{ recipe.calories }} | Protein: {{ recipe.protein }}g
+                    </p>
+                    <a href="{{ recipe.link }}" target="_blank" class="btn btn-sm btn-outline-info">View Recipe</a>
+                    <button class="btn btn-sm btn-success add-to-mealplan"
+                            data-title="{{ recipe.title }}"
+                            data-description="{{ recipe.description }}"
+                            data-link="{{ recipe.link }}"
+                            data-calories="{{ recipe.calories }}"
+                            data-protein="{{ recipe.protein }}">
+                      Add to Meal Plan
+                    </button>
+                  </div>
+                </div>
+              </div>
+            {% endfor %}
+          </div>
+        </div>
+      </div>
+
+        <h2>Recipe Suggestions</h2>
+
+            <!-- Preference input -->
+            <form method="get" action="{% url 'meal_planner_view' %}" class="mb-3">
+            <label for="preference">
+                Your current food preference:
+                {% if suggestions.preference %}
+                <span class="text-success fw-bold">{{ suggestions.preference }}</span>
+                {% else %}
+                <span class="text-muted">None set</span>
+                {% endif %}
+            </label>
+            <input type="text" id="preference" name="preference" 
+                    value="{{ suggestions.preference }}" class="form-control form-control-sm mt-2">
+            <button type="submit" class="btn btn-outline-primary btn-sm mt-2">Update Preference</button>
+            </form>
+
+
+            <!-- Chatbot suggestions -->
+            <h5>Top 3 suggestions based on your preferences:</h5>
+            <div class="row">
+            {% for recipe in suggestions.chatbot %}
+                <div class="col-md-4">
+                <div class="card mb-3">
+                    <div class="card-body">
+                    <h6 class="card-title">{{ recipe.title }}</h6>
+                    <p>{{ recipe.description }}</p>
+                    <p>Calories: {{ recipe.calories }} | Protein: {{ recipe.protien }}g | Carbs: {{ recipe.carbs }}g | Fats: {{ recipe.fats }}g | Sugar: {{ recipe.sugar }}g</p>
+                    <a href="{{ recipe.link }}" target="_blank" class="btn btn-outline-primary btn-sm mt-2">View Recipe</a>
+                    <button class="btn btn-outline-primary btn-sm mt-2"
+                            data-title="{{ recipe.title }}"
+                            data-description="{{ recipe.description }}"
+                            data-link="{{ recipe.link }}"
+                            data-calories= "{{ recipe.calories }}"
+                            data-protien="{{ recipe.protien }}"
+                            data-carbs= "{{ recipe.carbs }}"
+                            data-fats= "{{ recipe.fats }}"
+                            data-sugar= "{{ recipe.sugar }}"
+                            >
+                        Add to Meal Plan
+                    </button>
+                    </div>
+                </div>
+                </div>
+            {% empty %}
+                <p>No chatbot suggestions yet. Try setting a preference above.</p>
+            {% endfor %}
+            </div>
+
+            <!-- Random suggestions -->
+            <h5>Top 3 general suggestions:</h5>
+            <div class="row">
+            {% for meal in suggestions.random %}
+                <div class="col-md-4">
+                <div class="card mb-3">
+                    <div class="card-body">
+                    <h6 class="card-title">{{ meal.meal_name }}</h6>
+                    <p>Calories: {{ meal.calories }} | Protein: {{ meal.protien }}g | Carbs: {{ meal.carbs }}g | Fats: {{ meal.fats }}g | Sugar: {{ meal.sugar }}g</p>
+                    <button class="btn btn-outline-primary btn-sm mt-2"
+                            data-title="{{ meal.meal_name }}"
+                            data-calories="{{ meal.calories }}"
+                            data-protien="{{ meal.protien }}"
+                            data-carbs= "{{ meal.carbs }}"
+                            data-fats= "{{ meal.fats }}"
+                            data-sugar= "{{ meal.sugar }}">
+                        Add to Meal Plan
+                    </button>
+                    </div>
+                </div>
+                </div>
+            {% empty %}
+                <p>No meals in database yet.</p>
+            {% endfor %}
+            </div>
+
+    </main>
+  </div>
+</div>
+<div id="mealTypeModal" class="modal" style="display:none;">
+  <div class="modal-content">
+    <span class="close">&times;</span>
+    <h3>Select Meal Type and Date</h3>
+    <form id="mealTypeForm" method="post" action="{% url 'add-to-mealplan' %}">
+  {% csrf_token %}
+  <input type="hidden" name="title" id="titleField">
+  <input type="hidden" name="description" id="descriptionField">
+  <input type="hidden" name="link" id="linkField">
+  <input type="hidden" name="calories" id="caloriesField">
+  <input type="hidden" name="fats" id="fatsField">
+  <input type="hidden" name="carbs" id="carbsField">
+  <input type="hidden" name="sugar" id="sugarField">
+  <input type="hidden" name="sodium" id="sodiumField">
+  <input type="hidden" name="protein" id="proteinField">
+
+  <label for="mealTypeChoice">Meal Type:</label>
+  <select name="meal_type_choice" id="mealTypeChoice" required>
+    <option value="Breakfast">Breakfast</option>
+    <option value="Lunch">Lunch</option>
+    <option value="Dinner">Dinner</option>
+    <option value="Snack">Snack</option>
+    <option value="Dessert">Dessert</option>
+    <option value="Beverage">Beverage</option>
+  </select>
+  <br><br>
+
+  <label for="mealDate">Meal Date:</label>
+  <input type="date" name="meal_date" id="mealDate" required>
+  <br><br>
+
+  <button type="submit">Confirm</button>
+</form>
+  </div>
+</div>
+
+<style>
+.modal {
+  position: fixed;
+  z-index: 1000;
+  left: 0; top: 0;
+  width: 100%; height: 100%;
+  background-color: rgba(0,0,0,0.5);
+}
+.modal-content {
+  background: #fff;
+  margin: 15% auto;
+  padding: 20px;
+  width: 300px;
+  border-radius: 8px;
+  text-align: center;
+}
+.close {
+  float: right;
+  font-size: 20px;
+  cursor: pointer;
+}
+</style>
+
+<script>
+document.addEventListener("DOMContentLoaded", function() {
+  const modal = document.getElementById("mealTypeModal");
+  const closeBtn = document.querySelector(".close");
+  const form = document.getElementById("mealTypeForm");
+
+  // Fill hidden fields when clicking "Add to Meal Plan"
+  document.querySelectorAll(".add-to-mealplan").forEach(btn => {
+    btn.addEventListener("click", function() {
+      document.getElementById("titleField").value = this.dataset.title;
+      document.getElementById("descriptionField").value = this.dataset.description;
+      document.getElementById("linkField").value = this.dataset.link;
+      document.getElementById("caloriesField").value = this.dataset.calories;
+      document.getElementById("fatsField").value = this.dataset.fats;
+      document.getElementById("carbsField").value = this.dataset.carbs;
+      document.getElementById("sugarField").value = this.dataset.sugar;
+      document.getElementById("sodiumField").value = this.dataset.sodium;
+      document.getElementById("proteinField").value = this.dataset.protein;
+      modal.style.display = "block";
+    });
+  });
+
+  // Close modal
+  closeBtn.onclick = () => modal.style.display = "none";
+  window.onclick = (event) => {
+    if (event.target == modal) modal.style.display = "none";
+  };
+
+  // AJAX form submission
+  form.addEventListener("submit", function(event) {
+    event.preventDefault();
+    const csrfToken = document.querySelector('[name=csrfmiddlewaretoken]').value;
+    const formData = new FormData(form);
+
+    fetch("{% url 'add_recipe_to_mealplan' %}", {
+      method: "POST",
+      headers: { "X-CSRFToken": csrfToken },
+      body: formData
+    })
+    .then(response => {
+      if (response.ok) {
+        modal.style.display = "none";
+        window.location.href = "{% url 'meal_planner_view' %}";
+      } else {
+        alert("Error adding meal to plan.");
+      }
+    })
+    .catch(error => {
+      console.error("Error:", error);
+      alert("Something went wrong.");
+    });
+  });
+});
+</script>
+{% endblock %}
