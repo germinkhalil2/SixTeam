@@ -1,29 +1,27 @@
-<!DOCTYPE html>
-<html>
-<head>
-    <title>Login - Meal Planner</title>
-</head>
-<body>
+{% extends "base.html" %}
 
-    <h1>Login to Your Meal Planner</h1>
+{% block title %}Login - Meal Planner{% endblock %}
 
-    {% if messages %}
-        {% for message in messages %}
-            <p style="color: red;">{{ message }}</p>
-        {% endfor %}
-    {% endif %}
+{% block content %}
+<h1>Login to Your Meal Planner</h1>
 
-    <form method="POST">
-        {% csrf_token %}
+{% if messages %}
+    {% for message in messages %}
+        <p style="color: red;">{{ message }}</p>
+    {% endfor %}
+{% endif %}
 
-        <label>Username:</label><br>
-        <input type="text" name="username" required><br><br>
+<form method="POST">
+    {% csrf_token %}
 
-        <label>Password:</label><br>
-        <input type="password" name="password" required><br><br>
+    <label>Username:</label><br>
+    <input type="text" name="username" required><br><br>
 
-        <button type="submit">Log In</button>
-    </form>
-    <p>Don't have an account? <a href="{% url 'signup' %}">Sign up here</a>.</p>
-</body>
-</html>
+    <label>Password:</label><br>
+    <input type="password" name="password" required><br><br>
+
+    <button type="submit">Log In</button>
+</form>
+
+<p>Don't have an account? <a href="{% url 'signup' %}">Sign up here</a>.</p>
+{% endblock %}
