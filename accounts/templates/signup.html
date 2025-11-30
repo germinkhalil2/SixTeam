@@ -1,16 +1,14 @@
-<!DOCTYPE html>
-<html>
-<head>
-    <title>Meal Planner Signup</title>
-</head>
-<body>
-    <h1>Create Your Meal Planner Account</h1>
+{% extends "base.html" %}
 
-    <form method="POST">
-        {% csrf_token %}
-        {{ form.as_p }}
-        <button type="submit">Sign Up</button>
-    </form>
+{% block title %}Meal Planner Signup{% endblock %}
 
-</body>
-</html>
+{% block content %}
+<h1>Create Your Meal Planner Account</h1>
+
+<form method="POST">
+    {% csrf_token %}
+    {{ form.as_p }}
+    <button type="submit">Sign Up</button>
+</form>
+{% endblock %}
+
