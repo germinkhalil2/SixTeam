@@ -1,31 +1,24 @@
-<!DOCTYPE html>
-<html>
-<head>
-    <title>Meal Planner Home</title>
-</head>
-<body>
+{% extends "base.html" %}
 
-    <h1>Welcome, {{ request.user.username }}!</h1>
-    <h2>Your Meal Planner Dashboard</h2>
+{% block title %}Meal Planner Home{% endblock %}
 
-    <p>Select an option below:</p>
+{% block content %}
 
-    <ul>
-        <li><a href="#">User Profile</a></li>
-        <li><a href="#">Plan This Week’s Meals</a></li>
-        <li><a href="#">View Grocery List</a></li>
-        <li><a href="#">Saved Recipes</a></li>
-        <li><a href="#">Nutrition Tracker</a></li>
-        <li><a href="{% url 'budget' %}">Budget Tracker</a></li>
-       
-    </ul>
+<h1>Welcome, {{ request.user.username }}!</h1>
+<h2>Your Meal Planner Dashboard</h2>
 
-    <br>
+<p>Select an option below:</p>
 
-    <form action="/logout/" method="POST">
-        {% csrf_token %}
-        <button type="submit">Logout</button>
-    </form>
+<ul style="list-style: none; padding: 0;">
+    <li><a href="#" style="text-decoration:none; display:block; margin:8px 0; padding:10px; background:#6a5acd; color:white; border-radius:10px;">User Profile</a></li>
 
-</body>
-</html>
+    <li><a href="#" style="text-decoration:none; display:block; margin:8px 0; padding:10px; background:#6a5acd; color:white; border-radius:10px;">Plan This Week’s Meals</a></li>
+
+    <li><a href="#" style="text-decoration:none; display:block; margin:8px 0; padding:10px; background:#6a5acd; color:white; border-radius:10px;">View Grocery List</a></li>
+
+    <li><a href="#" style="text-decoration:none; display:block; margin:8px 0; padding:10px; background:#6a5acd; color:white; border-radius:10px;">Saved Recipes</a></li>
+
+    <li><a href="#" style="text-decoration:none; display:block; margin:8px 0; padding:10px; background:#6a5acd; color:white; border-radius:10px;">Nutrition Tracker
+
+{% endblock %}
+
