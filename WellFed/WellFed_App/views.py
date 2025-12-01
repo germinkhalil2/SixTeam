@@ -317,6 +317,7 @@ def add_recipe_to_mealplan(request):
 @csrf_exempt
 def add_to_mealplan(request):
     if request.method == "POST":
+        meal_name = request.POST.get("meal_name")
         meal_id = request.POST.get("meal_id")
         meal_type_choice = request.POST.get("meal_type_choice")
         meal_date = request.POST.get("meal_date")
