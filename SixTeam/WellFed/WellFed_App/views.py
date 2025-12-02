@@ -15,4 +15,11 @@ def home_view(request):
     return render(request, 'home.html')
 
 def preference_view(request):
-    return render(request, 'user_pref.html')
+    if request.method == "POST":
+        restrictions = request.POST.getlist("dietary[]")
+        other = request.POST.get("dietary_other")
+
+        print("Restrictions:", restrictions)
+        print("Other:", other)
+
+    return render(request, "user_pref.html")

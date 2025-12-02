@@ -1,28 +1,130 @@
 {% load static %}
+
 <!doctype html>
+
 <html lang="en">
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width,initial-scale=1">
-    <title>{% block title %}User Preferences{% endblock %}</title>
-    <link rel="stylesheet" href="{% static 'css/style.css' %}">
-    {% block extra_head %}{% endblock %}
+    <title>User Preferences</title>
+
+```
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css">
+<link rel="stylesheet" href="{% static 'css/style.css' %}">
+```
+
 </head>
-<body>
-    <header>
-        <h1>{% block header %}User Preferences{% endblock %}</h1>
-    </header>
 
-    <main>
-        {% block content %}
-        <p>Welcome — this is a bare-bones user preferences page. replace this with your form or settings UI.</p>
-        {% endblock %}
-    </main>
+<body class="bg-light">
 
-    <footer>
-        <small>&copy; {% now "Y" %}</small>
-    </footer>
+<nav class="navbar navbar-expand-lg navbar-dark" style="background-color:#2e7d32;">
+    <div class="container">
+        <a class="navbar-brand" href="#">Meal Planner</a>
+    </div>
+</nav>
 
-    {% block scripts %}{% endblock %}
+<div class="container my-5">
+    <div class="card shadow-sm p-4" style="border-radius:15px;">
+
+```
+    <h2 class="text-center mb-4">User Dietary Restrictions</h2>
+    <p class="text-center text-muted">Select all dietary restrictions that apply.</p>
+
+    <form method="POST">
+        {% csrf_token %}
+
+        <div class="row row-cols-1 row-cols-md-2 g-3">
+            {% comment %} Each checkbox block {% endcomment %}
+
+            <div class="col">
+                <div class="form-check card p-3 shadow-sm">
+                    <input class="form-check-input" type="checkbox" name="dietary[]" value="sesame" id="sesame">
+                    <label class="form-check-label fw-semibold" for="sesame">Sesame</label>
+                </div>
+            </div>
+
+            <div class="col">
+                <div class="form-check card p-3 shadow-sm">
+                    <input class="form-check-input" type="checkbox" name="dietary[]" value="shellfish" id="shellfish">
+                    <label class="form-check-label fw-semibold" for="shellfish">Shellfish</label>
+                </div>
+            </div>
+
+            <div class="col">
+                <div class="form-check card p-3 shadow-sm">
+                    <input class="form-check-input" type="checkbox" name="dietary[]" value="eggs" id="eggs">
+                    <label class="form-check-label fw-semibold" for="eggs">Eggs</label>
+                </div>
+            </div>
+
+            <div class="col">
+                <div class="form-check card p-3 shadow-sm">
+                    <input class="form-check-input" type="checkbox" name="dietary[]" value="wheat" id="wheat">
+                    <label class="form-check-label fw-semibold" for="wheat">Wheat</label>
+                </div>
+            </div>
+
+            <div class="col">
+                <div class="form-check card p-3 shadow-sm">
+                    <input class="form-check-input" type="checkbox" name="dietary[]" value="soy" id="soy">
+                    <label class="form-check-label fw-semibold" for="soy">Soy</label>
+                </div>
+            </div>
+
+            <div class="col">
+                <div class="form-check card p-3 shadow-sm">
+                    <input class="form-check-input" type="checkbox" name="dietary[]" value="peanuts" id="peanuts">
+                    <label class="form-check-label fw-semibold" for="peanuts">Peanuts</label>
+                </div>
+            </div>
+
+            <div class="col">
+                <div class="form-check card p-3 shadow-sm">
+                    <input class="form-check-input" type="checkbox" name="dietary[]" value="fish" id="fish">
+                    <label class="form-check-label fw-semibold" for="fish">Fish</label>
+                </div>
+            </div>
+
+            <div class="col">
+                <div class="form-check card p-3 shadow-sm">
+                    <input class="form-check-input" type="checkbox" name="dietary[]" value="treenuts" id="treenuts">
+                    <label class="form-check-label fw-semibold" for="treenuts">Tree Nuts</label>
+                </div>
+            </div>
+
+            <div class="col">
+                <div class="form-check card p-3 shadow-sm">
+                    <input class="form-check-input" type="checkbox" name="dietary[]" value="milk" id="milk">
+                    <label class="form-check-label fw-semibold" for="milk">Milk</label>
+                </div>
+            </div>
+
+            <div class="col">
+                <div class="card p-3 shadow-sm">
+                    <label class="form-check-label fw-semibold">
+                        <input class="form-check-input me-2" type="checkbox" name="dietary[]" value="other">
+                        Other
+                    </label>
+                    <input type="text" class="form-control mt-2" name="dietary_other" placeholder="Specify if needed">
+                </div>
+            </div>
+        </div>
+
+        <div class="text-center mt-4">
+            <button class="btn btn-success px-4 py-2" type="submit" style="font-size:1.1rem;">
+                Save Preferences
+            </button>
+        </div>
+    </form>
+
+</div>
+```
+
+</div>
+
+<footer class="text-center p-3" style="background:#2e7d32; color:white;">
+    © {% now "Y" %} Meal Planner App
+</footer>
+
 </body>
 </html>
