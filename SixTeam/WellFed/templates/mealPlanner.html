@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Meal Planner - WellFed</title>
+    <link rel="stylesheet" href="/static/css/styles.css">
+    <script src="/static/js/mealPlanner.js" defer></script>
+</head>
+<body>
+    <div>This is a temporary meal planner.</div>
+    <h1>List of individual meals in the system:</h1>
+        {% for i in single_meals %}
+        <div>{{i.meal_name}}</div>
+        <div>{{i.meal_description}}</div>
+        <div>{{i.meal_type_choice}}</div>
+        <div>{{i.calories}} calories</div>
+        <div>{{i.protein}}g protien</div>
+        <div>{{i.carbs}}g carbs</div>
+        <div>{{i.fats}}g fats</div>
+        <div>Link to Recipe: {{i.recipe_link}}</div>
+        <button type="button">Add Meal to Your Planner</button>
+        <br>
+        <br>
+        {% endfor %}
+        <br>
+    <a href="/">Return to Home Page</a>
+</body>
+</html>

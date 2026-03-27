@@ -1,0 +1,28 @@
+{% load static %}
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <title>{% block title %}User Preferences{% endblock %}</title>
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+    {% block extra_head %}{% endblock %}
+</head>
+<body>
+    <header>
+        <h1>{% block header %}User Preferences{% endblock %}</h1>
+    </header>
+
+    <main>
+        {% block content %}
+        <p>Welcome — this is a bare-bones user preferences page. Replace this with your form or settings UI.</p>
+        {% endblock %}
+    </main>
+
+    <footer>
+        <small>&copy; {% now "Y" %}</small>
+    </footer>
+
+    {% block scripts %}{% endblock %}
+</body>
+</html>
